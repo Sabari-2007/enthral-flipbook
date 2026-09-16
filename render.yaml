@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: enthral-flipbook
+    runtime: node
+    repo: https://github.com/Sabari-2007/enthral-flipbook
+    plan: free
+    region: singapore
+    rootDir: flipbook
+    buildCommand: npm install  # no deps → no-op, keeps it fast
+    startCommand: node server.mjs
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: HOST
+        value: 0.0.0.0
+      - key: NODE_ENV
+        value: production
+      - key: DATA_DIR
+        value: /var/data
