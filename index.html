@@ -1,0 +1,548 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>FlipBook â€” Digital Flipbook Reader</title>
+  <meta name="description" content="Turn a PDF into a beautiful interactive flipbook. Lazy-loaded, large-PDF friendly, works fully offline in your browser." />
+
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%238068F2' d='M12 5.5C10 4 7 4 4 4v14c3 0 6 .2 8 2 2-1.8 5-2 8-2V4c-3 0-6 .4-8 1.5z'/%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap"
+    rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <noscript>
+    <div class="noscript">FlipBook needs JavaScript enabled to render PDFs. Please enable JavaScript and reload.</div>
+  </noscript>
+
+  <div id="app">
+
+    <!-- ============ HEADER ============ -->
+    <header class="topbar" id="topbar">
+      <div class="topbar-inner">
+        <a class="brand" id="brand" href="#" title="ENTHRAL FLIPBOOK home" aria-label="ENTHRAL FLIPBOOK home">
+          <span class="brand-mark" aria-hidden="true">
+            <img src="images/logo.jpg" alt="Enthral" />
+          </span>
+          <span class="brand-name">Enthral</span>
+          <span class="brand-chip">FlipBook</span>
+          <span class="brand-meta" id="brand-meta" hidden></span>
+        </a>
+
+        <nav class="main-nav" aria-label="Primary navigation">
+          <button class="nav-item is-active" id="nav-home" type="button" title="Home" aria-label="Home">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 10.8 12 3.5l8.5 7.3M5 9.5V20h4.6v-5h4.8v5H19V9.5" /></svg>
+            <span class="nav-label">Home</span>
+          </button>
+          <button class="nav-item" id="nav-library" type="button" title="Library" aria-label="Library">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h3.2v14H4zM9.6 4h3.2v15H9.6zM15.2 6h3.2v12h-3.2zM4 21h16" /><path d="M4 5h3.2v14H4zM9.6 4h3.2v15H9.6zM15.2 6h3.2v12h-3.2zM4 21h16" fill="none" /></svg>
+            <span class="nav-label">Library</span>
+          </button>
+
+          <button class="nav-item" id="nav-settings" type="button" title="Settings" aria-label="Settings">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2" /><path d="M12 2.8v2.6M12 18.6v2.6M4.4 4.4l1.9 1.9M17.7 17.7l1.9 1.9M2.8 12h2.6M18.6 12h2.6M4.4 19.6l1.9-1.9M17.7 6.3l1.9-1.9" /></svg>
+            <span class="nav-label">Settings</span>
+          </button>
+        </nav>
+
+        <div class="topbar-actions">
+          <button class="btn btn-ghost btn-icon" id="btn-close-book" type="button" title="Close book"
+            aria-label="Close current book" hidden>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 5.5l13 13M18.5 5.5l-13 13" /></svg>
+          </button>
+          <button class="btn btn-primary" id="btn-upload-top" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0 4.5 4.5M12 4 7.5 8.5M4 20h16" /></svg>
+            <span class="btn-upload-label">Upload PDF</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============ MAIN ============ -->
+    <main id="main">
+
+<!-- ---- WELCOME / HOME ---- -->
+      <section class="view view--home" id="view-welcome">
+
+        <!-- ===== MARKETING NAV ===== -->
+        <nav class="landing-nav" aria-label="Main navigation">
+          <div class="landing-links">
+            <a href="#how-it-works">How it works</a>
+            <a href="#features">Features</a>
+            <a href="#use-cases">Examples</a>
+            <a href="#integrations">Integrations</a>
+          </div>
+        </nav>
+
+        <!-- ===== HERO / WHY FLIPBOOK ===== -->
+        <div class="home-hero" id="why">
+          <div class="hero-copy">
+            <h1 class="hero-title">Why <span class="text-accent">FlipBook</span>?</h1>
+            <p class="hero-sub">Because PDFs no longer cut it. They can&rsquo;t engage your audience, boost
+              marketing and sales efforts, or let you measure content performance. Interactive online flipbooks
+              with custom branding and videos can do it all and so much more! <strong>See for yourself:</strong></p>
+            <div class="hero-actions">
+              <button class="btn btn-primary btn-xl" id="btn-upload-welcome" type="button">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0 4.5 4.5M12 4 7.5 8.5M4 20h16" /></svg>
+                Take your content beyond plain PDFs
+              </button>
+            </div>
+            <div class="recent-wrap" id="recent-wrap" hidden>
+              <h2 class="recent-heading">Recently opened</h2>
+              <div class="recent-list" id="recent-list"></div>
+            </div>
+          </div>
+
+          <div class="hero-visual" aria-hidden="true">
+            <div class="hero-banner">
+              <div class="hero-book">
+              <div class="hero-book-cover">
+                <img class="hero-book-cover-img" src="images/cover.png" alt="Enthral — Digital Edition cover" />
+                <span class="hero-book-brand">Enthral Magazine</span>
+                <span class="hero-book-title">Enthral</span>
+                <span class="hero-book-line"></span>
+                <span class="hero-book-sub">Digital Edition</span>
+              </div>
+                <div class="hero-book-pages"><i></i><i></i><i></i><i></i></div>
+              </div>
+              <span class="hero-banner-caption">Take your content beyond plain PDFs</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== HOW IT WORKS ===== -->
+        <div class="home-section" id="how-it-works">
+          <h2 class="home-h2">How to create a digital flipbook</h2>
+          <p class="home-lead">Go beyond static PDFs with interactive flipbooks, magazines, proposals that are
+            easy to share as direct links, and then track how clients interact with them.</p>
+          <div class="steps-grid">
+            <article class="step-card">
+              <span class="step-label">01 Â· Upload</span>
+              <p><strong>UPLOAD</strong> your PDF to FlipBook. It&rsquo;ll be converted into a digital flipbook
+                that looks just like a physical copy on any device.</p>
+            </article>
+            <article class="step-card">
+              <span class="step-label">02 Â· Customize</span>
+              <p><strong>CUSTOMIZE</strong> your publication: add your company branding and interactive elements,
+                such as videos, outbound links, pop-up images, and a lead capture form.</p>
+            </article>
+            <article class="step-card">
+              <span class="step-label">03 Â· Share</span>
+              <p>Once your publication looks its best, <strong>SHARE</strong> it with clients.</p>
+            </article>
+          </div>
+        </div>
+
+        <!-- ===== KEY FEATURES ===== -->
+        <div class="home-section home-section--tint" id="features">
+          <h2 class="home-h2">Key features</h2>
+          <p class="home-lead">Everything you need to turn plain PDFs into flipbooks people actually enjoy reading.</p>
+          <div class="feature-grid">
+            <article class="feature-card">
+              <span class="feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 8h6M9 12h6M9 16h4"/></svg></span>
+              <h3>Unique design</h3>
+              <p>Make each flipbook a clear extension of your brand &mdash; add a clickable logo, customize the
+                direct link to your flipbooks, set the background and the color palette to reflect your company style.</p>
+            </article>
+            <article class="feature-card">
+              <span class="feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16m0 0-4-4m4 4-4 4M4 12h16m0 0-4-4m4 4-4 4" transform="scale(-1 1) translate(-24 0)"/></svg></span>
+              <h3>Easy sharing</h3>
+              <p>With FlipBook, your PDFs turn into links you can share anywhere: email them directly, post to
+                socials, or embed into your websites. Share single flipbooks or entire collections.</p>
+            </article>
+            <article class="feature-card">
+              <span class="feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></span>
+              <h3>Content analytics</h3>
+              <p>Measure how your flipbooks perform and empower your marketing. See how many views a flipbook
+                gets, which pages engage your audience, and which links are click-worthy.</p>
+            </article>
+            <article class="feature-card">
+              <span class="feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5h11v9M16 19H5v-9"/><circle cx="10.5" cy="14.5" r="2"/></svg></span>
+              <h3>Interactivity</h3>
+              <p>Enrich your flipbook with interactive elements embedded anywhere on the page: add video
+                tutorials, images, or direct links.</p>
+            </article>
+            <article class="feature-card">
+              <span class="feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 10V8a6 6 0 0 1 12 0v2"/><rect x="4.5" y="10" width="15" height="10" rx="2"/></svg></span>
+              <h3>Content protection</h3>
+              <p>Keeping your content secure on the web is vital. You can protect your flipbook from
+                unauthorized access or copying.</p>
+            </article>
+            <article class="feature-card">
+              <span class="feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="2"/><path d="M3.5 9h17M9 3.5v17"/></svg></span>
+              <h3>Mobile-friendly content</h3>
+              <p>Your flipbooks look stunning on all devices directly in any browser.</p>
+            </article>
+          </div>
+        </div>
+
+        <!-- ===== USE CASES ===== -->
+        <div class="home-section" id="use-cases">
+          <h2 class="home-h2">Flipbooks for every need</h2>
+          <div class="needs-row">
+            <span class="need-chip">Magazine</span>
+            <span class="need-chip">Catalog</span>
+            <span class="need-chip">Brochure</span>
+            <span class="need-chip">Ebook</span>
+            <span class="need-chip">Report</span>
+            <span class="need-chip">Pitch</span>
+            <span class="need-chip">Newsletter</span>
+          </div>
+          <div class="home-cta">
+            <h3>Ready to see your own content flip?</h3>
+            <p>Upload a PDF and watch it become a flipbook in seconds &mdash; stored in the cloud and shareable by link.</p>
+            <button class="btn btn-primary btn-lg" id="btn-upload-cta" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0 4.5 4.5M12 4 7.5 8.5M4 20h16" /></svg>
+              Upload a PDF now
+            </button>
+          </div>
+        </div>
+
+        <!-- ===== INTEGRATIONS ===== -->
+        <div class="home-section home-section--tint" id="integrations">
+          <h2 class="home-h2">FlipBook integrations</h2>
+          <p class="home-lead">You can integrate FlipBook with other apps for a more powerful experience and a
+            smoother workflow across your entire team.</p>
+          <div class="int-grid">
+            <article class="int-card">
+              <span class="int-logo">C</span>
+              <h3>Canva</h3>
+              <p>Create a PDF in Canva or use one of our Canva templates and then send your content right into
+                FlipBook with our seamless integration.</p>
+            </article>
+            <article class="int-card">
+              <span class="int-logo">GA</span>
+              <h3>Google Analytics</h3>
+              <p>Integrate a Google Analytics code right into your flipbook for deeper insights on how clients
+                interact with your digital content.</p>
+            </article>
+            <article class="int-card">
+              <span class="int-logo">W</span>
+              <h3>WordPress</h3>
+              <p>Install and activate the FlipBook plugin on your WordPress site. This will let you embed
+                gorgeous flipbooks on your website.</p>
+            </article>
+            <article class="int-card">
+              <span class="int-logo">Z</span>
+              <h3>Zapier</h3>
+              <p>Connect any app with FlipBook to set up a seamless workflow &mdash; from delivering leads in
+                your CRM to getting notifications in Slack, or creating flipbooks automatically.</p>
+            </article>
+          </div>
+        </div>
+
+        <!-- ===== FOOTER ===== -->
+        <footer class="home-footer">
+          <div class="footer-grid">
+            <div class="footer-brand">
+              <span class="footer-mark">Flip<em>Book</em></span>
+              <p>Turn your PDF into a beautiful interactive flipbook — read and resume, all in your browser.</p>
+            </div>
+
+            <nav class="footer-col" aria-label="Product">
+              <h4>Product</h4>
+              <ul>
+                <li><a href="#how-it-works">How it works</a></li>
+                <li><a href="#features">Key features</a></li>
+                <li><a href="#use-cases">Use cases</a></li>
+                <li><a href="#integrations">Integrations</a></li>
+              </ul>
+            </nav>
+
+            <nav class="footer-col" aria-label="Reader">
+              <h4>Reader</h4>
+              <ul>
+                <li>Realistic page-turn sound</li>
+                <li>Thumbnails panel</li>
+                <li>Search inside the book</li>
+                <li>Bookmarks &amp; resume</li>
+                <li>Zoom &amp; fullscreen</li>
+              </ul>
+            </nav>
+
+            <nav class="footer-col" aria-label="Privacy">
+              <h4>Privacy</h4>
+              <ul>
+                <li>Nothing is uploaded</li>
+                <li>No account needed</li>
+                <li>PDFs stay on your device</li>
+                <li>No cookies, no tracking</li>
+              </ul>
+            </nav>
+
+            <div class="footer-col footer-credit" aria-label="About">
+              <h4>About</h4>
+              <ul>
+                <li>Designed for <strong>Enthral</strong></li>
+                <li>Designed by <strong>HARISHKUMAR T</strong></li>
+                <li>FlipBook &middot; 2026</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="footer-bottom">
+            <span class="fb-copy">&copy; 2026 FlipBook &middot; Enthral. All rights reserved.</span>
+            <span class="footer-bottom-credit">Designed for <strong>Enthral</strong> &middot; Designed by <strong>HARISHKUMAR T</strong></span>
+          </div>
+        </footer>
+      </section>
+
+      <!-- ---- READER ---- -->
+      <section class="view is-hidden" id="view-reader">
+        <div class="reader-title" id="reader-title">
+          <div class="reader-title-main">
+            <h2 id="reader-book-title">â€”</h2>
+            <span class="reader-book-pages" id="reader-book-pages"></span>
+          </div>
+          <div class="reader-title-current">
+            <span class="chip" id="reader-current-chip">Page 1</span>
+          </div>
+        </div>
+
+        <div class="reader-stage" id="reader-stage">
+          <button class="nav-arrow nav-arrow--prev" id="btn-arrow-prev" type="button"
+            title="Previous page" aria-label="Previous page">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 5.5-6.5 6.5 6.5 6.5" /></svg>
+          </button>
+          <button class="nav-arrow nav-arrow--next" id="btn-arrow-next" type="button"
+            title="Next page" aria-label="Next page">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 5.5 6.5 6.5-6.5 6.5" /></svg>
+          </button>
+
+          <div class="reader-scroll" id="reader-scroll">
+            <div class="book-shell" id="book-shell"><!-- #book is created here by JS --></div>
+            <div class="page-loading" id="page-loading" hidden>
+              <span class="spinner" aria-hidden="true"></span>
+              <span id="page-loading-text">Loading pageâ€¦</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---- LIBRARY ---- -->
+      <section class="view is-hidden" id="view-library">
+        <div class="page-head">
+          <h2>Library</h2>
+          <p class="muted">All magazines, stored in the cloud and available to everyone. Open any magazine, or
+            share it by link so anyone can read it.</p>
+        </div>
+
+        <div class="library-grid" id="library-list"></div>
+        <div class="empty-state" id="library-empty" hidden>
+          <div class="empty-icon" id="library-empty-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h3.2v14H4zM9.6 4h3.2v15H9.6zM15.2 6h3.2v12h-3.2z" /></svg>
+          </div>
+          <h3>Your library is empty</h3>
+          <p class="muted">Upload a PDF to start reading. It will be stored in the cloud and shown here as a
+            magazine.</p>
+          <button class="btn btn-primary" id="btn-library-upload" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0 4.5 4.5M12 4 7.5 8.5M4 20h16" /></svg>
+            Upload PDF
+          </button>
+        </div>
+      </section>
+
+      <!-- ---- SHARE PANEL ---- -->
+      <div class="panel-overlay" id="panel-share" hidden role="dialog" aria-modal="true" aria-label="Share book">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Share this book</h3>
+            <button class="tbtn" id="btn-close-share" type="button" title="Close share"
+              aria-label="Close share">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+            </button>
+          </div>
+          <p class="panel-hint muted">Share a link to this book. Anyone with the link can open it directly.</p>
+          <div class="share-form" id="share-form" hidden>
+            <div class="share-link-row">
+              <input id="share-link-input" type="text" readonly class="share-link-input"
+                aria-label="Shareable link" />
+              <button class="btn btn-primary" id="btn-copy-link" type="button">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2" /><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" /></svg>
+                Copy Link
+              </button>
+            </div>
+          </div>
+          <div class="share-meta" id="share-meta"></div>
+        </div>
+      </div>
+
+      <!-- ---- SETTINGS PANEL ---- -->
+      <div class="panel-overlay" id="panel-settings" hidden role="dialog" aria-modal="true" aria-label="Settings">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Settings</h3>
+            <button class="tbtn" id="btn-close-settings" type="button" title="Close settings"
+              aria-label="Close settings">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+            </button>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-text">
+              <span class="setting-label">Theme</span>
+              <span class="setting-desc">Interface appearance</span>
+            </div>
+            <div class="segmented" role="group" aria-label="Theme">
+              <button class="seg" id="set-theme-dark" type="button" aria-pressed="true">Dark</button>
+              <button class="seg" id="set-theme-light" type="button" aria-pressed="false">Light</button>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-text">
+              <span class="setting-label">Reading mode</span>
+              <span class="setting-desc">Two-page spread or single page</span>
+            </div>
+            <div class="segmented" role="group" aria-label="Reading mode">
+              <button class="seg" id="set-mode-auto" type="button" aria-pressed="true">Auto</button>
+              <button class="seg" id="set-mode-single" type="button" aria-pressed="false">Single</button>
+              <button class="seg" id="set-mode-two" type="button" aria-pressed="false">Two page</button>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-text">
+              <span class="setting-label">Page animation</span>
+              <span class="setting-desc">Smooth page-turn effect</span>
+            </div>
+            <button class="switch" id="set-anim" type="button" role="switch" aria-checked="true"
+              title="Toggle page animation"><span class="switch-knob"></span></button>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-text">
+              <span class="setting-label">Auto page turning</span>
+              <span class="setting-desc">Automatically turn pages while reading</span>
+            </div>
+            <button class="switch" id="set-autoturn" type="button" role="switch" aria-checked="false"
+              title="Toggle auto page turning"><span class="switch-knob"></span></button>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-text">
+              <span class="setting-label">Remember last page</span>
+              <span class="setting-desc">Resume where you left off when reopening a file</span>
+            </div>
+            <button class="switch" id="set-remember" type="button" role="switch" aria-checked="true"
+              title="Toggle remembering last page"><span class="switch-knob"></span></button>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-text">
+              <span class="setting-label">Library history</span>
+              <span class="setting-desc">Recently opened books recorded in this browser</span>
+            </div>
+            <button class="link" id="btn-clear-library" type="button" title="Clear recent books">Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---- THUMBNAILS PANEL ---- -->
+      <div class="panel-thumbs" id="panel-thumbs" hidden>
+        <div class="thumb-head">
+          <span class="thumb-title">Thumbnails</span>
+          <span class="thumb-current muted" id="thumb-current"></span>
+          <button class="tbtn" id="btn-close-thumbs" type="button" title="Hide thumbnails"
+            aria-label="Hide thumbnails">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5" /></svg>
+          </button>
+        </div>
+        <div class="thumb-strip" id="thumb-strip" tabindex="0" role="list" aria-label="Page thumbnails"></div>
+      </div>
+    </main>
+
+    <!-- ============ TOOLBAR ============ -->
+    <footer class="toolbar" id="toolbar" hidden>
+      <div class="toolbar-inner">
+        <div class="toolbar-group">
+          <button class="tbtn" id="btn-thumbs" type="button" title="Thumbnails" aria-label="Toggle thumbnails">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.2" /><rect x="13.5" y="3.5" width="7" height="7" rx="1.2" /><rect x="3.5" y="13.5" width="7" height="7" rx="1.2" /><rect x="13.5" y="13.5" width="7" height="7" rx="1.2" /></svg>
+          </button>
+        </div>
+
+        <div class="toolbar-group toolbar-group--nav">
+          <button class="tbtn" id="btn-first" type="button" title="First page (Home)" aria-label="Go to first page">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6M18 6l-6 6 6 6" /></svg>
+          </button>
+          <button class="tbtn" id="btn-prev" type="button" title="Previous page (Left)" aria-label="Previous page">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 5.5-6.5 6.5 6.5 6.5" /></svg>
+          </button>
+          <div class="page-indicator">
+            <input id="page-input" type="text" inputmode="numeric" autocomplete="off" spellcheck="false"
+              title="Current page â€” type a number and press Enter" aria-label="Current page number"
+              value="1" />
+            <span class="page-sep" aria-hidden="true">/</span>
+            <span class="page-total" id="page-total">â€”</span>
+          </div>
+          <button class="tbtn" id="btn-next" type="button" title="Next page (Right)" aria-label="Next page">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 5.5 6.5 6.5-6.5 6.5" /></svg>
+          </button>
+          <button class="tbtn" id="btn-last" type="button" title="Last page (End)" aria-label="Go to last page">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 6 6 6-6 6M6 6l6 6-6 6" /></svg>
+          </button>
+        </div>
+
+        <div class="toolbar-group">
+          <button class="tbtn" id="btn-zoom-out" type="button" title="Zoom out" aria-label="Zoom out">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20.5 20.5-4.1-4.1M8 11h6" /></svg>
+          </button>
+          <button class="zoom-label" id="zoom-label" type="button" title="Zoom level â€” click to reset to fit"
+            aria-label="Zoom level">90%</button>
+          <button class="tbtn" id="btn-zoom-in" type="button" title="Zoom in" aria-label="Zoom in">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20.5 20.5-4.1-4.1M11 8v6M8 11h6" /></svg>
+          </button>
+        </div>
+
+        <div class="toolbar-group">
+          <button class="tbtn tbtn--share" id="btn-share" type="button" title="Share this book" aria-label="Share this book">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="2.6" /><circle cx="6" cy="12" r="2.6" /><circle cx="18" cy="19" r="2.6" /><path d="m8.2 10.9 7.6-4.4M8.2 13.1l7.6 4.4" /></svg>
+          </button>
+          <button class="tbtn" id="btn-fullscreen" type="button" title="Fullscreen (F)" aria-label="Toggle fullscreen">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V5.5A1.5 1.5 0 0 1 5.5 4H9M15 4h3.5A1.5 1.5 0 0 1 20 5.5V9M20 15v3.5a1.5 1.5 0 0 1-1.5 1.5H15M9 20H5.5A1.5 1.5 0 0 1 4 18.5V15" /></svg>
+          </button>
+          <button class="tbtn tbtn--exit-fs" id="btn-exit-fs" type="button" title="Exit fullscreen" aria-label="Exit fullscreen" hidden>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" /></svg>
+          </button>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ============ OVERLAYS ============ -->
+    <div class="drop-zone" id="drop-zone" hidden>
+      <div class="drop-card">
+        <div class="drop-icon" aria-hidden="true">
+          <svg width="56" height="56" viewBox="0 0 24 24"><path d="M12 16V4m0 0 4.5 4.5M12 4 7.5 8.5M4 20h16" /></svg>
+        </div>
+        <p class="drop-title">Drop your PDF here</p>
+        <p class="drop-sub">Release to open instantly</p>
+      </div>
+    </div>
+
+    <div class="load-overlay" id="load-overlay" hidden role="alertdialog" aria-modal="true" aria-label="Loading">
+      <div class="load-card">
+        <span class="spinner spinner--lg" aria-hidden="true"></span>
+        <p class="load-title" id="load-title">Preparing your bookâ€¦</p>
+        <p class="load-sub" id="load-sub"></p>
+        <div class="load-bar"><div class="load-bar-fill" id="load-bar-fill"></div></div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" hidden role="status"></div>
+
+    <input type="file" id="file-input" accept="application/pdf,.pdf" hidden tabindex="-1" />
+  </div>
+
+  <script src="vendor/pdf.min.js"></script>
+  <script src="vendor/page-flip.browser.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

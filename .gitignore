@@ -1,0 +1,11 @@
+﻿# Giant local PDFs / cloud storage — NOT part of the static site.
+# The reader is fully client-side: visitors upload their own PDF.
+magazine lib/
+cloud/
+*.pdf
+
+# Editor / OS cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+node_modules/
