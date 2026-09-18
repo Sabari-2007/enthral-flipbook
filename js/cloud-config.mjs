@@ -9,5 +9,5 @@
 export const CLOUD = {
   supabaseUrl: 'https://jvsyawrcdmsifjksupipik.supabase.co',
   supabasePublishableKey: 'sb_publishable_b_pXc6PywBKb0s_hdeMhGw_BrCpi6D_',
-  bucket: 'enthral',
+  bucket: 'Enthral',
 };
